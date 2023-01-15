@@ -28,7 +28,6 @@ To get started with the Payment SDK, you will need to:
 
 ```gradle
 implementation 'com.github.vi31b:netappssdk:0.0.1'
-[//]: # (implementation 'com.netappspaysdk:netappspay:0.0.1')
 ```
 
 Add the the following to your AndroidManifest.xml file:
