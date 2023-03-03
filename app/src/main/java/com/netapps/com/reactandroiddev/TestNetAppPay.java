@@ -17,12 +17,12 @@ public class TestNetAppPay extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
         Button btnGoRNScreen = this.findViewById(R.id.btnGoRNScreen);
-        NetAppsPaySheet Payment = new NetAppsPaySheet("b1108bfb3e2542b287162ef27da838f9", getSupportFragmentManager());
+        NetAppsPaySheet Payment = new NetAppsPaySheet("f8c767af762443bb96bb5a991c8362d3", getSupportFragmentManager());
         btnGoRNScreen.setOnClickListener(it -> {
             try {
                 JSONObject obj = new JSONObject();
                 obj.put("currency", "NGN");
-                obj.put("amount", "10");
+                obj.put("amount", "1000");
                 obj.put("phone", "08105535178");
                 obj.put("email", "nwokolawrence6@gmail.com");
                 obj.put("fullname", "Nwoko Ndubueze");
