@@ -47,8 +47,8 @@ NetAppsPaySheet Payment = new NetAppsPaySheet("YOUR_API_KEY", getSupportFragment
             JSONObject obj = new JSONObject();
             obj.put("currency", "NGN");
             obj.put("amount", "10");
-            obj.put("phone", "08105535178");
-            obj.put("email", "nwokolawrence6@gmail.com");
+            obj.put("phone", "080****");
+            obj.put("email", "email@example.com");
             obj.put("fullname", "Nwoko Ndubueze");
             obj.put("narration", "Testing");
             obj.put("tx_ref", "12o9876eertyuiolkjkvghjkjhjjhklhgf344sdsd");
