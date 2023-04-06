@@ -1,17 +1,29 @@
-## Payment SDK
-### Introduction
+# README
 
-The Payment SDK allows you to easily integrate payment functionality into your Android app. With just a few lines of code, you can offer your users a variety of payment options, including card payments, USSD payments, bank transfers, and more.
-## Getting Started
+## TestNetAppPay
+
+This Android application demonstrates the integration of the `NetAppsPaySheet` library for handling payments. The application includes a button that triggers the payment process using the `NetAppsPaySheet` library with predefined payment parameters.
+
+### Table of Contents
+
+- [Overview](#overview)
+- [Usage](#usage)
+- [Methods](#methods)
+
+### Overview
+
+The `TestNetAppPay` class is an `AppCompatActivity` that implements the `NetAppsPaySheet.NetAppsPayActionSheetListener` interface. The class is responsible for initializing the payment process using the `NetAppsPaySheet` library, and handling the success and error callbacks.
+
+### Usage
 
 Go to gradle.properties and add the line below:
 
-```gradle
+ ```gradle
 android.enableJetifier=true
 ```
 
 Add  `https://jitpack.io` to your repository example below:
-```java
+ ```java
     repositories {
         google()
         mavenCentral()
@@ -19,90 +31,119 @@ Add  `https://jitpack.io` to your repository example below:
     }
 ```
 
-
 To get started with the Payment SDK, you will need to:
 
-1) Obtain an API key from NetAppsPay. This can be done by signing up for a developer account at NetAppsPay Developer Portal.
 
-2) Install the Payment SDK in your Android project. This can be done by adding the following dependency to your build.gradle file:
 
+
+1. Obtain an API key from NetAppsPay. This can be done by signing up for a developer account at NetAppsPay Developer Portal.
+2. Install the Payment SDK in your Android project. This can be done by adding the following dependency to your build.gradle file:
+3. Import the necessary packages and classes.
+4. Extend the `AppCompatActivity` and implement the `NetAppsPaySheet.NetAppsPayActionSheetListener` interface.
+5. Override the `onCreate` method to initialize the view and set up the button click listener.
+6. Create a new `JSONObject` with the required payment parameters.
+7. Call `NetAppsPaySheet.start()` with the required parameters.
+8. Override the `onSuccess` and `onError` methods to handle the success and error callbacks, respectively.
+
+### Methods
+
+- `onCreate(@Nullable Bundle savedInstanceState)`: Initializes the view, sets up the button click listener, and triggers the payment process using the `NetAppsPaySheet` library.
+- `onSuccess(String message)`: Handles the success callback, logs the message.
+- `onError(String message)`: Handles the error callback, logs the message.
+
+- [Dependencies](#dependencies)
+- [Integration Steps](#integration-steps)
+
+### Dependencies
+
+In order to use the `NetAppsPaySheet` library in your project, ensure that the required dependencies are added to your project's `build.gradle` file.
+ 
 ```gradle
-implementation 'com.github.vi31b:netappssdk:0.0.6'
+implementation 'com.github.vi31b:netappssdk:0.0.7'
 ```
 
-Add the the following to your AndroidManifest.xml file:
+### Integration Steps
 
-```xml
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-```
+1. Add the required dependencies to your project's `build.gradle` file.
+2. Create a new Android Activity class (e.g., `TestNetAppPay`) that extends `AppCompatActivity` and implements the `NetAppsPaySheet.NetAppsPayActionSheetListener` interface.
+3. In the `onCreate` method, initialize the view and set up the button click listener.
+4. In the button click listener, create a new `JSONObject` with the required payment parameters.
+5. Call `NetAppsPaySheet.start()` with the context, payment parameters, and the listener.
+6. Override the `onSuccess` and `onError` methods to handle the success and error callbacks, respectively.
 
-Initialize the Payment SDK in your Activity . In the example below, we initialize the Payment SDK and set up button click listeners to initiate a payment and handle success or failure callbacks:
+
+
+Example:
 
 ```java
-NetAppsPaySheet Payment = new NetAppsPaySheet("YOUR_API_KEY", getSupportFragmentManager());
+public class TestNetAppPay extends AppCompatActivity implements NetAppsPaySheet.NetAppsPayActionSheetListener {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        // ...
+    }
 
+    @Override
+    public void onSuccess(String message) {
+        // Handle success
+    }
+
+    @Override
+    public void onError(String message) {
+        // Handle error
+    }
+}
+```
+
+Complete Code: 
+```java
+package com.netapps.com;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
+
+import com.netappssdk.NetAppsPaySheet;
+
+
+public class TestNetAppPay extends AppCompatActivity implements NetAppsPaySheet.NetAppsPayActionSheetListener {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.activity_main);
+
+        Button btnGoRNScreen = this.findViewById(R.id.btnGoRNScreen);
         btnGoRNScreen.setOnClickListener(it -> {
-        try {
-            JSONObject obj = new JSONObject();
-            obj.put("currency", "NGN");
-            obj.put("amount", "10");
-            obj.put("phone", "080****");
-            obj.put("email", "email@example.com");
-            obj.put("fullname", "Nwoko Ndubueze");
-            obj.put("narration", "Testing");
-            obj.put("tx_ref", "12o9876eertyuiolkjkvghjkjhjjhklhgf344sdsd");
-            obj.put("paymentChannels", "card,ussd,transfer,payatitude");
+            try {
+                JSONObject obj = new JSONObject();
+                obj.put("public_key","b1108bfb3e2542b287162ef27da838f9");
+                obj.put("currency", "NGN");
+                obj.put("amount", "1000");
+                obj.put("phone", "***080");
+                obj.put("email", "example@gmail.com");
+                obj.put("fullname", "Nwoko Ndubueze");
+                obj.put("narration", "Testing");
+                obj.put("tx_ref", "12o9876eertyuiolkjkvghjkjhjjhklhgf344sdsd");
+                obj.put("paymentChannels", "card,ussd,transfer,payatitude");
 
-        Payment.setPaymentFailedCallback(res -> {
-            Log.d("JAVAres", res.toString());
-        });
+                NetAppsPaySheet.start(this, obj, this);
 
-        Payment.setPaymentSuccessCallback(res -> {
-             Log.d("JAVAres", res.toString());
-        });
-        
-        Payment.InitPayment(obj);
-        
-        } catch (Exception e) {
-             Log.d("Law", e.getMessage());
-        }
-        });
 
+            } catch (Exception e) {
+                Log.d("Law", e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void onSuccess(String message) {
+        Log.d("Develop", "onSuccess: ");
+    }
+
+    @Override
+    public void onError(String message) {
+        Log.d("develop", "onError: ");
+    }
+}
 ```
-
-## Payment Parameters
-
-The Payment SDK requires a JSONObject to be passed as a parameter when initiating a payment. This JSONObject should contain the following parameters:
-
-* currency (string): The currency of the payment (e.g. "NGN").
-* amount (string): The amount of the payment (e.g. "10").
-*  phone (string): The phone number of the user making the payment.
-* email (string): The email address of the user making the payment.
-* fullname (string): The full name of the user making the payment
-* narration (string): A description of the payment.
-* tx_ref (string): A unique reference for the payment. This should be generated by your app and can be used to identify the payment later on.
-* paymentChannels (string): A comma-separated list of payment channels to enable for the payment (e.g. "card,ussd,transfer,payatitude").
-
-Handling Payment Results
-
-After a payment has been initiated, the Payment SDK will either return a success or failure result. You can handle these results by setting up success and failure callbacks using the setPaymentSuccessCallback and setPaymentFailedCallback methods:
-
-```java
-Payment.setPaymentFailedCallback(res -> {
-    Log.d("JAVAres", res.toString());
-});
-
-Payment.setPaymentSuccessCallback(res -> {
-    Log.d("JAVAres", res.toString());
-});
-```
-
-The success and failure callbacks will be passed a JSONObject containing the result of the payment. The structure of this JSONObject will depend on the payment channel used and the result of the payment.
-
-## Additional Resources
-
-For more information on using the Payment SDK, please see the NetAppsPay Developer Portal.
-Support
-
-If you have any questions or need assistance using the Payment SDK, please contact us at support@NetAppsPay.com.
